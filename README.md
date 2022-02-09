@@ -50,3 +50,8 @@ def train_model(features: List[str], target: str, data: pd.DataFrame):
 
     return model, X_test, y_test
 ```
+
+### Model evaluation
+
+To evaluate the models quality, I use the following plots: 
+![Precision, recall, tpr and fpr vs. decision threshold, feature importance and confusion matrix](https://github.com/jakobkolb/ml-covid-nowcasting/blob/main/Detection%20model%20(logistic%20regression)/model_metrics.png)
