@@ -1,0 +1,7 @@
+**/.ipynb_checkpoints
+**/db_cache
+
+.idea
+.gitsecret/keys/random_seed
+!*.secret
+/Detection model (logistic regression)/postgres_credentials.yaml
