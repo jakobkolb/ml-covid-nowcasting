@@ -42,4 +42,10 @@ jobs:
           sleep 20
       - name: Run ML pipeline
         run: |
-          cat services/airflow/deploy.sh | ssh -A -o "StrictHostKeyChecking no" kolb@ornt.biologie.hu-berlin.de
+          poetry run jupyter nbconvert --to notebook --execute Detection\ model\ \(logistic\ regression\)/Detection\ model\ \(Logistic\ regression\).ipynb
+      - name: Update plots
+        uses: test-room-7/action-update-file@v1
+        with:
+          file-path: Detection\ model\ \(logistic\ regression\)/*.png
+          commit-msg: Update resources
+          github-token: ${{ secrets.GITHUB_TOKEN }}
