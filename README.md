@@ -1,4 +1,10 @@
 # ML bases covid cases nowcasting
+
+[![ML-Pipeline](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml/badge.svg)](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml)
+
+## Description
+TLDR: This project trains a logistic regression model on daily vital data (resting heart rate and steps) as well as user reported symptoms as well as sex and age on data where users also reported test results. The trained model is then used to estimate the number of infections in the total user population over time.
+
 This project uses poetry for package management
 
 ## Usage:
@@ -6,8 +12,6 @@ from the project root:
 * run `poetry install` to setup env and install dependencies,
 * run `make notebook` to start jupyter notebook in virtual env.
 
-## Description
-TLDR: This project trains a logistic regression model on daily vital data (resting heart rate and steps) as well as user reported symptoms as well as sex and age on data where users also reported test results. The trained model is then used to estimate the number of infections in the total user population over time.
 
 ### Data:
 Data consists of daily values for resting heart rate and steps for each user on many (not all) days. In addition, users report approximately once a week on which symptoms they experienced and whether they got tested for COVID during the past seven days. If they took a test, they also report the test result. In addition, users reported age and sex once.
