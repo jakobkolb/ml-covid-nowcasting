@@ -1,6 +1,6 @@
 # ML bases covid cases nowcasting
 
-[![ML-Pipeline](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml/badge.svg)](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml)
+[![ML-Pipeline](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml/badge.svg?branch=main)](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml)
 
 ## Description
 TLDR: This project trains a logistic regression model on daily vital data (resting heart rate and steps) as well as user reported symptoms as well as sex and age on data where users also reported test results. The trained model is then used to estimate the number of infections in the total user population over time.
