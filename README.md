@@ -53,5 +53,15 @@ def train_model(features: List[str], target: str, data: pd.DataFrame):
 
 ### Model evaluation
 
-To evaluate the models quality, I use the following plots: 
-![Precision, recall, tpr and fpr vs. decision threshold, feature importance and confusion matrix](https://github.com/jakobkolb/ml-covid-nowcasting/blob/main/Detection%20model%20(logistic%20regression)/model_metrics.png)
+To evaluate the models quality, I use the following plots displaying precission and recall vs. decision threshold in A), true positive and false positive rate vs. decision threshold in B, feature importance as regression coefficients in C) and confusion matrix in D).
+![Precision, recall, tpr and fpr vs. decision threshold, feature importance and confusion matrix](/Detection%20model%20(logistic%20regression)/model_metrics.png?raw=true)
+
+To nowcast covid cases I
+1) score all data (also the data without test results) with the trained model, 
+2) classify the resulting infection probabilities with a threshold of 0.5 
+3) exclude positive classifications in weeks after a previous positive classification to only count new cases
+4) use a rolling average over 7 days, normalize by all observations on each day and multiply by to calculate the daily incidence per 100.000.
+
+This incidence is compared to reported incidences stratified by vaccination status in the following plot:
+
+![Nowcasted compared to reported 7 day case incidence](/Detection%20model%20(logistic%20regression)/incidence_nowcast.png?raw=true)
