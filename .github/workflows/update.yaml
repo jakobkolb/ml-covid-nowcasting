@@ -48,4 +48,4 @@ jobs:
         with:
           file-path: Detection\ model\ \(logistic\ regression\)/*.png
           commit-msg: Update resources
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PUSH_TOKEN }}
