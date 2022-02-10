@@ -38,7 +38,7 @@ jobs:
 
       - name: Setup tmate debug session
         uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled }}
+        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'true' }}
 
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
