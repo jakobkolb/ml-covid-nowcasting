@@ -26,15 +26,13 @@ jobs:
         uses: Kingmidas74/git-secret-github-action@latest
       - name: Reveal secrets
         run: git secret reveal
-      - name: Install openvpn
-        run: sudo apt install openvpn
-      - name: Write vpn secrets to file
+      - name: Connect to VPN
+        shell: bash
         env:
           VPN_SECRET: ${{secrets.VPN_SECRET}}
-        run: 'echo "$VPN_SECRET" > vpn_secrets.conf'
-        shell: bash
-      - name: Connect to VPN
         run: |
+          sudo apt install openvpn &&
+          echo "$VPN_SECRET" > vpn_secrets.conf &&
           sudo openvpn --config .github/workflows/hu-berlin.ovpn --auth-user-pass vpn_secrets.conf &&
           sleep 20
 
