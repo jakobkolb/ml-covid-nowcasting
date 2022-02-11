@@ -7,7 +7,6 @@ TLDR: This project trains a logistic regression model on daily vital data (resti
 
 Figures in this README are updated with latest data on a daily basis via Github actions.
 
-This project uses poetry for package management
 
 ## Usage:
 from the project root:
