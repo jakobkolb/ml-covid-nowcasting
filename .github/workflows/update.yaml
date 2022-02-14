@@ -37,10 +37,6 @@ jobs:
           echo "$VPN_SECRET" > vpn_secrets.conf &&
           sudo openvpn --config .github/workflows/hu-berlin.ovpn --auth-user-pass vpn_secrets.conf
 
-      - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'true' }}
-
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
@@ -55,8 +51,13 @@ jobs:
       - name: Update plots
         uses: test-room-7/action-update-file@v1
         with:
-          file-path: Detection\ model\ \(logistic\ regression\)/*.png
+          file-path: |
+            Detection\ model\ \(logistic\ regression\)/incidence_nowcast.png
+            Detection\ model\ \(logistic\ regression\)/model_metrics.png
           commit-msg: Update resources
           github-token: ${{ secrets.PUSH_TOKEN }}
 
+      - name: Setup tmate debug session
+        uses: mxschmitt/action-tmate@v3
+        if: ${{always() && github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'true' }}
 
