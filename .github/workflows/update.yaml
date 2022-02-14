@@ -17,6 +17,7 @@ on:
 jobs:
   run-model:
     runs-on: ubuntu-latest
+    if: "!contains(github.event.head_commit.message, 'Update resources')"
 
     steps:
       - uses: actions/checkout@v2
@@ -43,6 +44,10 @@ jobs:
           python-version: "3.8"
       - name: Setup Poetry
         uses: Gr1N/setup-poetry@v7
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/pypoetry/virtualenvs
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
       - name: Install dependencies
         run: poetry install
       - name: Run ML pipeline
@@ -52,8 +57,8 @@ jobs:
         uses: test-room-7/action-update-file@v1
         with:
           file-path: |
-            Detection\ model\ \(logistic\ regression\)/incidence_nowcast.png
-            Detection\ model\ \(logistic\ regression\)/model_metrics.png
+            incidence_nowcast.png
+            model_metrics.png
           commit-msg: Update resources
           github-token: ${{ secrets.PUSH_TOKEN }}
 
