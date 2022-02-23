@@ -8,11 +8,6 @@ on:
     - cron: "0 0 * * *"
 
   workflow_dispatch:
-    inputs:
-      debug_enabled:
-        description: 'Run the build with tmate debugging enabled (https://github.com/marketplace/actions/debugging-with-tmate)'
-        required: false
-        default: 'true'
 
 jobs:
   run-model:
@@ -68,9 +63,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ github.ref }}
-
-      # Setup debug session if requested
-      - name: Setup tmate debug session
-        uses: mxschmitt/action-tmate@v3
-        if: ${{always() && github.event_name == 'workflow_dispatch' && github.event.inputs.debug_enabled == 'true' }}
 
