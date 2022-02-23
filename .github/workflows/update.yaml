@@ -16,7 +16,7 @@ on:
 
 jobs:
   run-model:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     if: "!contains(github.event.head_commit.message, 'Update resources')"
 
     steps:
@@ -38,7 +38,7 @@ jobs:
         env:
           VPN_SECRET: ${{secrets.VPN_SECRET}}
         run: |
-          sudo apt install openvpn &&
+          sudo apt install openvpn -y &&
           echo "$VPN_SECRET" > vpn_secrets.conf &&
           sudo openvpn --config .github/workflows/hu-berlin.ovpn --auth-user-pass vpn_secrets.conf
 
