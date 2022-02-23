@@ -5,3 +5,5 @@
 .gitsecret/keys/random_seed
 !*.secret
 /Detection model (logistic regression)/postgres_credentials.yaml
+**/Detection model (logistic regression)/Detection model (Logistic regression).nbconvert.ipynb
+**/vpn_secrets.conf
