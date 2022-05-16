@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "analysis"
+name = "ml-nowcasting"
 version = "0.1.0"
 description = ""
 authors = ["Jakob J. Kolb <kolb@hardfork.io>"]
@@ -12,7 +12,6 @@ psycopg2-binary = "^2.9.1"
 matplotlib = "^3.4.3"
 sklearn = "^0.0"
 numpy = "^1.19.5"
-ramda = "^0.6.4"
 joblib = "^1.1.0"
 openpyxl = "^3.0.9"
 nbconvert = "^6.4.2"
@@ -23,6 +22,9 @@ PyYAML = "^6.0"
 SQLAlchemy = "^1.4.31"
 plotly = "^5.6.0"
 kaleido = "0.2.1"
+imbalanced-learn = "^0.9.0"
+ramda = "^0.7.4"
+scikit-learn = "1.0.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
