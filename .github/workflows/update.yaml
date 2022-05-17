@@ -50,7 +50,7 @@ jobs:
         run: poetry install
       - name: Run ML pipeline
         run: |
-          poetry run jupyter nbconvert --to notebook --execute Detection\ model\ \(logistic\ regression\)/Detection\ model\ \(Logistic\ regression\).ipynb
+          poetry run jupyter nbconvert --to notebook --execute Detection\ model\ \(logistic\ regression\)/Detection_model.ipynb
 
       # Push updates to repo
       - name: Commit updates

@@ -12,7 +12,7 @@ from joblib import Memory, memory
 from psycopg2 import connect
 from psycopg2.sql import SQL, Identifier, Literal, Composed
 
-notebook_path = os.path.abspath("Detection model (Logistic regression).ipynb")
+notebook_path = os.path.abspath("Detection_model.ipynb")
 
 cachedir = "./db_cache"
 Path(cachedir).mkdir(exist_ok=True)
@@ -31,7 +31,10 @@ def load_yaml_file(path) -> dict:
         except yaml.YAMLError as exc:
             print(exc)
 
-print('cached')
+
+print("cached")
+
+
 @mem.cache
 def pull_from_postgres(query: Union[str, SQL, Composed]) -> pd.DataFrame:
     credentials = load_yaml_file(
@@ -157,9 +160,22 @@ def add_variant_data(feature_data: pd.DataFrame) -> pd.DataFrame:
         pd.to_datetime
     )
 
+    # add one entry for today assuming the variant shares don't change
+    variant_data = variant_data.append(
+        {
+            "test_week_start": pd.to_datetime(datetime.now().date()),
+            delta_column: 0,
+            omicronba1_column: 1,
+            omicronba2_column: 99,
+        },
+        ignore_index=True,
+    )
+
     # upsample variant data to daily values, using linear interpolation
     upsampled_variant_data = (
-        variant_data[["test_week_start", omicronba1_column, omicronba2_column, delta_column]]
+        variant_data[
+            ["test_week_start", omicronba1_column, omicronba2_column, delta_column]
+        ]
         .rename(
             columns={
                 omicronba1_column: "omicronba1_share",
@@ -185,29 +201,24 @@ def loading_and_pre_processing_pipeline():
     Dates for baseline are 60 days prior to the test week,
     Dates for signal in rhr and steps are the 7 days during the week for which the test was reported.
     """
-    print('load rhr')
     rhr_metric = load_standardized_vitals(
         "rhr", "fiftysix_day_median_min_30_values", "seven_day_max_min_3_values"
     ).set_index(["user_id", "test_week_start"])
 
-    print('load steps')
     steps_metric = load_standardized_vitals(
         "steps", "fiftysix_day_median_min_30_values", "seven_day_mean_min_3_values"
     ).set_index(["user_id", "test_week_start"])
 
-    print('load sleep')
     sleep_metric = load_standardized_vitals(
         "sleep_duration",
         "fiftysix_day_median_min_30_values",
         "seven_day_mean_min_3_values",
     ).set_index(["user_id", "test_week_start"])
 
-    print('load survey data')
     test_results = load_test_results_symptoms_sex_age().set_index(
         ["user_id", "test_week_start"]
     )
 
-    print('join features')
     feature_data = (
         rhr_metric.join(steps_metric)
         .join(sleep_metric)
@@ -215,10 +226,8 @@ def loading_and_pre_processing_pipeline():
         .reset_index()
     )
 
-    print('convert time column')
     feature_data["test_week_start"] = feature_data["test_week_start"].apply(
         pd.to_datetime
     )
-    print('add virus variant shares')
 
     return add_variant_data(feature_data)
