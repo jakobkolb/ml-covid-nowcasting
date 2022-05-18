@@ -16,7 +16,7 @@ notebook_path = os.path.abspath("Detection_model.ipynb")
 
 cachedir = "./db_cache"
 Path(cachedir).mkdir(exist_ok=True)
-mem = Memory(location=cachedir, verbose=0)
+mem = Memory(location=cachedir, verbose=1)
 memory._build_func_identifier = lambda func: func.__name__
 
 
@@ -30,9 +30,6 @@ def load_yaml_file(path) -> dict:
             return yaml.safe_load(file)
         except yaml.YAMLError as exc:
             print(exc)
-
-
-print("cached")
 
 
 @mem.cache
@@ -161,13 +158,18 @@ def add_variant_data(feature_data: pd.DataFrame) -> pd.DataFrame:
     )
 
     # add one entry for today assuming the variant shares don't change
-    variant_data = variant_data.append(
-        {
-            "test_week_start": pd.to_datetime(datetime.now().date()),
-            delta_column: 0,
-            omicronba1_column: 1,
-            omicronba2_column: 99,
-        },
+    variant_data = pd.concat(
+        [
+            variant_data,
+            pd.DataFrame(
+                {
+                    "test_week_start": [pd.to_datetime(datetime.now().date())],
+                    delta_column: [0],
+                    omicronba1_column: [1],
+                    omicronba2_column: [99],
+                }
+            ),
+        ],
         ignore_index=True,
     )
 
