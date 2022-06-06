@@ -46,53 +46,22 @@ def pull_from_postgres(query: Union[str, SQL, Composed]) -> pd.DataFrame:
 vital_ids = {"rhr": 65, "steps": 9, "sleep_duration": 43}
 
 
-def load_standardized_vitals(vital_type: str, baseline_type: str, signal_type: str):
+def load_standardized_vitals(vital_type: str):
     return pull_from_postgres(
         SQL(
             """
-            SELECT
-                *
-            FROM
-                (SELECT
-                    (signal.{signal_type} - baseline.{baseline_type}) / stats.std {column_name},
-                    features.user_id, features.test_week_start
-                FROM
-                    datenspende_derivatives.daily_vital_rolling_window_time_series_features baseline,
-                    datenspende_derivatives.daily_vital_rolling_window_time_series_features signal,
-                    datenspende_derivatives.daily_vital_statistics_before_infection stats,
-                    (
-                        SELECT
-                            *
-                        FROM datenspende_derivatives.homogenized_features
-                        ORDER BY user_id, test_week_start
-                    ) features
-                WHERE
-                    -- match vital types
-                    baseline.type = {vital_type} AND
-                    baseline.type = signal.type AND
-                    baseline.type = stats.type AND
-                    -- match source
-                    baseline.source = signal.source AND
-                    baseline.source = stats.source AND
-                    -- match user_ids
-                    features.user_id = baseline.user_id AND
-                    features.user_id = signal.user_id AND
-                    features.user_id = stats.user_id AND
-                    -- match dates
-                    features.test_week_start - integer '4' = baseline.date AND
-                    features.test_week_start + integer '4' = signal.date AND
-                    -- dont devide by zero
-                    stats.std > 0
-                ORDER BY user_id, test_week_start) vitals
-            WHERE
-                -- only download not null values
-                {column_name} IS NOT NULL
-            """
+        SELECT
+            signal {column_name}, test_week_start, user_id
+        FROM
+            jakob.ml_vital_features
+        WHERE
+            type={vital_type} AND
+            baseline_count>30 AND
+            signal_count > 3
+        """
         ).format(
             column_name=Identifier(f"{vital_type}_metric"),
             vital_type=Literal(vital_ids[vital_type]),
-            baseline_type=Identifier(baseline_type),
-            signal_type=Identifier(signal_type),
         )
     )
 
@@ -204,32 +173,25 @@ def loading_and_pre_processing_pipeline():
     Dates for signal in rhr and steps are the 7 days during the week for which the test was reported.
     """
     rhr_metric = load_standardized_vitals(
-        "rhr", "fiftysix_day_median_min_30_values", "seven_day_max_min_3_values"
+        "rhr",
     ).set_index(["user_id", "test_week_start"])
 
     steps_metric = load_standardized_vitals(
-        "steps", "fiftysix_day_median_min_30_values", "seven_day_mean_min_3_values"
-    ).set_index(["user_id", "test_week_start"])
-
-    sleep_metric = load_standardized_vitals(
-        "sleep_duration",
-        "fiftysix_day_median_min_30_values",
-        "seven_day_mean_min_3_values",
+        "steps",
     ).set_index(["user_id", "test_week_start"])
 
     test_results = load_test_results_symptoms_sex_age().set_index(
         ["user_id", "test_week_start"]
     )
 
-    feature_data = (
-        rhr_metric.join(steps_metric)
-        .join(sleep_metric)
-        .join(test_results)
-        .reset_index()
-    )
+    feature_data = rhr_metric.join(steps_metric).join(test_results).reset_index()
 
     feature_data["test_week_start"] = feature_data["test_week_start"].apply(
         pd.to_datetime
     )
+
+    del rhr_metric
+    del steps_metric
+    del test_results
 
     return add_variant_data(feature_data)
