@@ -3,8 +3,13 @@ import pandas as pd
 import seaborn as sns
 from matplotlib.colors import ListedColormap
 from sklearn.inspection import permutation_importance
-from sklearn.metrics import plot_roc_curve, confusion_matrix, ConfusionMatrixDisplay
-from imblearn.over_sampling import RandomOverSampler
+from sklearn.metrics import (
+    plot_roc_curve,
+    confusion_matrix,
+    ConfusionMatrixDisplay,
+    PrecisionRecallDisplay,
+)
+from imblearn.under_sampling import RandomUnderSampler
 
 color_palette = sns.color_palette("hls", 8)
 colormap = ListedColormap(sns.color_palette("hls", 8).as_hex())
@@ -68,7 +73,9 @@ def plot_roc_vs_threshold(ax, classifier, X_test, y_test):
 
 
 def plot_analysis(classifier, X_test, y_test, feature_names, threshold):
-    x_resampled, y_resampled = RandomOverSampler().fit_resample(X_test, y_test)
+
+    print("resample")
+    x_resampled, y_resampled = RandomUnderSampler().fit_resample(X_test, y_test)
 
     with plt.style.context("seaborn"):
         plt.rcParams.update(
@@ -79,16 +86,30 @@ def plot_analysis(classifier, X_test, y_test, feature_names, threshold):
             }
         )
         fig, axes = plt.subplot_mosaic(
-            [["left", "upper right"], ["left", "lower right"]],
-            figsize=(8, 4),
+            [["left", "upper right", "right"], ["left", "lower right", "right"]],
+            figsize=(15, 4),
             constrained_layout=True,
-            gridspec_kw={"width_ratios": [2, 1], "height_ratios": [1, 1]},
+            gridspec_kw={"width_ratios": [2, 1, 2], "height_ratios": [1, 1]},
         )
 
+        print("precission-recall")
+        PrecisionRecallDisplay.from_estimator(
+            classifier,
+            x_resampled,
+            y_resampled,
+            ax=axes["right"],
+            name="precision-recall curve",
+        )
+
+        print("roc-auc")
         plot_roc_vs_threshold(axes["upper right"], classifier, x_resampled, y_resampled)
+
+        print("permutation-feature-importance")
         plot_feature_importance(
             axes["left"], classifier, x_resampled, y_resampled, feature_names
         )
+
+        print("confusion-matrix")
         plot_confusion_matrix_with_threshold(
             axes["lower right"], classifier, x_resampled, y_resampled, threshold
         )

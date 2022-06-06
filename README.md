@@ -3,7 +3,7 @@
 [![ML-Pipeline](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml/badge.svg?branch=main)](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml)
 
 ## Description
-TLDR: This project trains a logistic regression model on daily vital data (resting heart rate and steps) as well as user reported symptoms as well as sex and age on data where users also reported test results. The trained model is then used to estimate the number of infections in the total user population over time.
+TLDR: This project trains a logistic regression model on daily vital data (resting heart rate and steps) that is augmented with survey data consisting of symptoms and sex and age as well as covid variant shares to predict covid test results. The trained model is then used to estimate the covid case incidence in the user population over time.
 
 Figures in this README are updated with latest data on a daily basis via Github actions.
 
