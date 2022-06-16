@@ -49,7 +49,7 @@ jobs:
       - name: Install dependencies
         run: poetry install
       - name: Setup Environment
-        run: mv Detection\ model\ \(logistic\ regression\)/.env.prod Detection\ model\ \(logistic\ regression\)/.env
+        run: cp Detection\ model\ \(logistic\ regression\)/.env.prod Detection\ model\ \(logistic\ regression\)/.env
       - name: Run ML pipeline
         run: |
           poetry run jupyter nbconvert --to notebook --execute Detection\ model\ \(logistic\ regression\)/Detection_model.ipynb
