@@ -51,16 +51,21 @@ def load_standardized_vitals(vital_type: str):
         SQL(
             """
         SELECT
-            signal {column_name}, test_week_start, user_id
+            signal_mean {mean_column_name}, 
+            signal_min {min_column_name}, 
+            signal_max {max_column_name}, 
+            date test_week_start, user_id
         FROM
-            jakob.ml_vital_features
+            datenspende_derivatives.vital_features
         WHERE
             type={vital_type} AND
             baseline_count>30 AND
             signal_count > 3
         """
         ).format(
-            column_name=Identifier(f"{vital_type}_metric"),
+            mean_column_name=Identifier(f"{vital_type}_signal_mean"),
+            min_column_name=Identifier(f"{vital_type}_signal_min"),
+            max_column_name=Identifier(f"{vital_type}_signal_max"),
             vital_type=Literal(vital_ids[vital_type]),
         )
     )
