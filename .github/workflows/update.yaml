@@ -52,7 +52,7 @@ jobs:
         run: cp model/.env.prod model/.env
       - name: Run ML pipeline
         run: |
-          poetry run jupyter nbconvert --to html --template lab --execute model/Detection_model.ipynb
+          poetry run jupyter nbconvert --to html --template lab --execute model/Incidence_nowcast.ipynb
 
       # Push updates to repo
       - name: Commit updates

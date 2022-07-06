@@ -5,7 +5,7 @@ description = ""
 authors = ["Jakob J. Kolb <kolb@hardfork.io>"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<3.10"
 jupyter = "^1.0.0"
 ipykernel = "^6.4.2"
 psycopg2-binary = "^2.9.1"
@@ -15,7 +15,7 @@ numpy = "^1.19.5"
 joblib = "^1.1.0"
 openpyxl = "^3.0.9"
 nbconvert = "^6.4.2"
-pandas = "^1.4.0"
+pandas = "^1.3.0"
 seaborn = "^0.11.2"
 tqdm = "^4.62.3"
 PyYAML = "^6.0"
@@ -27,6 +27,8 @@ ramda = "^0.7.4"
 scikit-learn = "1.0.2"
 requests = "^2.27.1"
 python-dotenv = "^0.20.0"
+autogluon = "^0.5"
+mxnet = "^1.9.1"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2"
