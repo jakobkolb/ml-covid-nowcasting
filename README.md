@@ -21,7 +21,7 @@ Data consists of daily values for resting heart rate and steps for each user on 
 Reported symptoms are coded as follows:
 * symptoms: 1 if the user experienced the symptom and 0 if not,
 * Age: as age groups in 5 year brackets starting 1935, ending 2010 labeled as integers from 1 to 16, 
-* Sex: 1 female, 2 male
+* Sex: 1 female, 2 male, 3 diverse
 * Resting heart rate (rhr): beats per minute once per day
 * Steps: number of steps per day once per day
 
