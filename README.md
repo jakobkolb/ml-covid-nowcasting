@@ -1,4 +1,4 @@
-# ML bases covid cases nowcasting
+# ML based covid cases nowcasting
 
 [![ML-Pipeline](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml/badge.svg?branch=main)](https://github.com/jakobkolb/ml-covid-nowcasting/actions/workflows/update.yaml)
 
