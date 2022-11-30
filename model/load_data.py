@@ -209,4 +209,5 @@ def loading_and_pre_processing_pipeline():
     del steps_metric
     del test_results
 
+
     return add_variant_data(feature_data)
