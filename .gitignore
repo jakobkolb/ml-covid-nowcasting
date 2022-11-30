@@ -1,6 +1,6 @@
 **/.ipynb_checkpoints
 **/__pycache__
-**/db_cache
+model/db_cache_tmp
 
 .idea
 .gitsecret/keys/random_seed
